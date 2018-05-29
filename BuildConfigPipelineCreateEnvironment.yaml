@@ -1,0 +1,22 @@
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: linuxpolskapipeline-createenvironment
+  labels:
+    name: linuxpolskapipeline-createenvironment
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |
+        node('') {
+	stage ('delete') {
+	//sh "oc get build | grep linuxpolskaapp-1 | awk '{print \$1}'  | xargs oc delete build"
+	openshiftDeleteResourceByKey(types: 'is' , keys: 'linuxpolskaapp')
+    	}
+	stage ('create') {
+	git (branch: 'master', url: 'https://github.com/chmielu1/jenkins-example.git')
+	sh "oc create -f BuildConfig.yaml,ImageStream.yaml,DeploymentConfig.yaml &> /dev/null"
+	}
+        }
+  triggers:
