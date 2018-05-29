@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: linuxpolskaapp
+  name: linuxpolskaapp
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: linuxpolskaapp
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: linuxpolskaapp
+        deploymentconfig: linuxpolskaapp
+    spec:
+      containers:
+      - image: linuxpolskaapp:latest
+        imagePullPolicy: Always
+        name: linuxpolskaapp
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      containerNames:
+      - linuxpolskaapp
+      from:
+        kind: ImageStreamTag
+        name: linuxpolskaapp:latest
+        namespace: app-pers
+    type: ImageChange

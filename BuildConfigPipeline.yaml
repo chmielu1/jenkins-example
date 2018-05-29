@@ -1,0 +1,18 @@
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: linuxpolskapipeline
+  labels:
+    name: linuxpolskapipeline
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |
+        node('') {
+        stage 'build'
+        openshiftBuild(buildConfig: 'linuxpolskaapp', showBuildLogs: 'true')
+        stage 'deploy'
+        openshiftDeploy(deploymentConfig: 'linuxpolskaapp')
+        }
+  triggers:
