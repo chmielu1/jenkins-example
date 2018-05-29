@@ -19,7 +19,7 @@ spec:
         }
 
         stage ('test') {
-        sh "curl http://linuxpolskaapp-app-pers.labs.openshift.internal && echo \"jest git\" "
+        sh "curl http://linuxpolskaapp-app-pers.apps.lab0.example.com && echo \"jest git\" "
         }
         }
   triggers:
