@@ -12,7 +12,7 @@ spec:
         node('') {
 	stage ('create') {
 	git (branch: 'master', url: 'https://github.com/chmielu1/jenkins-example.git')
-	sh "oc create -f testing/BuildConfig.yaml,testing/ImageStream.yaml,testing/DeploymentConfig.yaml &> /dev/null"
+	sh "oc create -f testing/BuildConfig.yaml,testing/ImageStream.yaml,testing/DeploymentConfig.yaml,testing/Service.yaml"
 	}
         }
   triggers:
