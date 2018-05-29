@@ -18,6 +18,6 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: php:7.1
+        name: php:7.0
         namespace: openshift
     type: Source
