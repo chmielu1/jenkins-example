@@ -1,0 +1,18 @@
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: linuxpolskapipeline-createenvironment-prod
+  labels:
+    name: linuxpolskapipeline-createenvironment-prod
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |
+        node('') {
+	stage ('create') {
+	git (branch: 'master', url: 'https://github.com/chmielu1/jenkins-example.git')
+	sh "oc create -f prod/Route.yaml,prod/ImageStream.yaml,prod/DeploymentConfig.yaml,prod/Service.yaml -n app-pers-prod"
+	}
+        }
+  triggers:
