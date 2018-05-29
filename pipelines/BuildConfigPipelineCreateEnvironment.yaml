@@ -10,11 +10,9 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfile: |
         node('') {
-	stage ('delete') {
-        openshiftDeleteResourceByKey(types: 'dc,bc,is' , keys: 'linuxpolskaapp,linuxpolskaapp,linuxpolskaapp')
-    	}
 	stage ('create') {
 	git (branch: 'master', url: 'https://github.com/chmielu1/jenkins-example.git')
+	sh "cd testing"
 	sh "oc create -f BuildConfig.yaml,ImageStream.yaml,DeploymentConfig.yaml &> /dev/null"
 	}
         }
