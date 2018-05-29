@@ -10,9 +10,16 @@ spec:
     jenkinsPipelineStrategy:
       jenkinsfile: |
         node('') {
-        stage 'build'
+        stage ('build') {
         openshiftBuild(buildConfig: 'linuxpolskaapp', showBuildLogs: 'true')
-        stage 'deploy'
+        }
+
+        stage ('deploy') {
         openshiftDeploy(deploymentConfig: 'linuxpolskaapp')
+        }
+
+        stage ('test') {
+        sh "curl http://linuxpolskaapp-app-pers.labs.openshift.internal && echo \"jest git\" "
+        }
         }
   triggers:

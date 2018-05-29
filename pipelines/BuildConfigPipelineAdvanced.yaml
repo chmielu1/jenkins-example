@@ -1,0 +1,31 @@
+kind: BuildConfig
+apiVersion: v1
+metadata:
+  name: linuxpolskapipelineadvanced
+  labels:
+    name: linuxpolskapipelineadvanced
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfile: |
+        node('') {
+
+        stage ('build') {
+        openshiftBuild(namespace: 'app-pers' ,buildConfig: 'linuxpolskaapp', showBuildLogs: 'true')
+        }
+
+        stage ('deploy') {
+        openshiftDeploy(namespace: 'app-pers' ,deploymentConfig: 'linuxpolskaapp')
+        }
+
+        stage ('test') {
+        sh "curl http://linuxpolskaapp-app-pers.labs.openshift.internal && echo \"jest git\" "
+        }
+
+        stage ('deployonproduction') {
+        openshiftTag(namespace: 'app-pers', sourceStream: 'linuxpolskaapp', sourceTag: 'latest' , destinationStream: 'linuxpolskaprod', destinationTag: 'tested')
+        openshiftDeploy(namespace: 'app-pers-prod', deploymentConfig: 'linuxpolskaprod')
+        }
+        }
+  triggers:
